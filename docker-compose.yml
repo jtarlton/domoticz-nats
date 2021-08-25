@@ -1,0 +1,24 @@
+version: '3'
+services:
+  domoticz:
+    image: domoticz/domoticz
+    container_name: domoticz
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./domoticz-data:/opt/domoticz/userdata
+    environment:
+      - TZ=Europe/London
+  nats:
+    container_name: nats
+    image: nats:scratch
+    restart: unless-stopped
+    entrypoint: /nats-server
+    command: --js --sd /data --config /conf/nats.conf
+    ports:
+      - 4222:4222
+      - 1883:1883
+    volumes:
+      - ./nats-data:/data
+      - ./nats-conf:/conf

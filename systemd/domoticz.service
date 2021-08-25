@@ -1,0 +1,21 @@
+# Systemd unit file for the Domoticz Service.
+# Copy to /lib/systemd/system
+
+[Unit]
+Description=Domoticz Service
+Requires=docker.service
+After=docker.service
+After=network-online.target docker.service
+ConditionPathExists=/opt/domoticz/docker-compose.yml
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/domoticz
+ExecStart=/opt/domoticz/systemd/domoticz.sh start
+ExecStop=/opt/domoticz/systemd/domoticz.sh stop
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target
+
